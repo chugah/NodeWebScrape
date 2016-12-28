@@ -7,7 +7,8 @@ describe('Delete a record', () => {
 	beforeEach((done) => {
 		james = new User({ 
 			first_name: 'James', 
-			last_name: 'Joyce' 
+			last_name: 'Joyce', 
+			postCount: 0 
 		});
 		
 		james.save()
@@ -28,8 +29,7 @@ describe('Delete a record', () => {
 
 	it('should update a user via model instance method Set and Save', (done) => {
 		james.set('first_name', 'Miriam');
-		changeName(james.save(), done);
-			
+		changeName(james.save(), done);		
 	});
 
 	it('should update a user via model instance method Update', (done) => {
@@ -46,5 +46,14 @@ describe('Delete a record', () => {
 
 	it('should update a user via class method findByIdAndUpdate', (done) => {
 		changeName(User.findByIdAndUpdate(james._id, { first_name: 'Miriam' }), done);
+	});
+
+	it('should increment the number of posts for a given user by 1', (done) => {
+		User.update({ first_name: 'James'}, { $inc: { postCount: 1 } })
+			.then(() => User.findOne({ first_name: 'James'}))
+			.then((user) => {
+				assert(user.postCount === 1);
+				done();
+			});
 	});
 });
