@@ -8,7 +8,7 @@ describe('Delete a record', () => {
 		james = new User({ 
 			first_name: 'James', 
 			last_name: 'Joyce', 
-			postCount: 0 
+			likes: 0 
 		});
 		
 		james.save()
@@ -49,10 +49,10 @@ describe('Delete a record', () => {
 	});
 
 	it('should increment the number of posts for a given user by 1', (done) => {
-		User.update({ first_name: 'James'}, { $inc: { postCount: 1 } })
+		User.update({ first_name: 'James'}, { $inc: { likes: 1 } })
 			.then(() => User.findOne({ first_name: 'James'}))
 			.then((user) => {
-				assert(user.postCount === 1);
+				assert(user.likes === 1);
 				done();
 			});
 	});
